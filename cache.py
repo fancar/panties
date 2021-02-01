@@ -55,12 +55,12 @@ class Cache:
             if self._main_key not in d:
                 raise Exception(f"[cache] every dict in list must contain key: {self._main_key}")
 
+            gwid = d[self._main_key] = d[self._main_key].upper()
             if master:
-                self._master_content.add(d[self._main_key].lower())
+                self._master_content.add(gwid)
 
-            elif d[self._main_key].lower() in self._master_content:
-                    x = d[self._main_key].lower()
-                    self._log.debug(f'[cache] data for "{x}" skipped as it handles by master')
+            elif gwid in self._master_content:
+                    self._log.debug(f'[cache] data for "{gwid}" skipped as it handles by master')
                     continue
 
             result[d[self._main_key]] = {
