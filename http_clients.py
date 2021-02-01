@@ -12,7 +12,7 @@ HDRS1 = {'Accept': 'application/json', 'Authorization' : AUTH1 }
 HDRS2 = {'Accept': 'application/json', 'Authorization' : AUTH2 }
 
 async def http_clients(ctx):
-    print('http clients have been started')
+    ctx['logger'].info(f'http clients have been started. Requests every {REQUEST_TIME} seconds ...')
     await asyncio.gather(
         http_client(ctx=ctx,master=False,url=URL1,headers=HDRS1),
         http_client(ctx=ctx,master=True, url=URL2,headers=HDRS2)
