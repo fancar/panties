@@ -83,11 +83,11 @@ class Cache:
         self._data = result
 
     def check_ttl(self):
-        if self._ttl*2 + self._last_time < time.time():
+        if self._ttl*2 + self._last_time < time.time() and self._data:
             self._log.warning(f'[cache] Data in cache is too old (last ts: {self._last_time}). Cleaning up cache ...')
             self._data = []
 
-        if self._ttl*2 + self._master_last_ts < time.time():
+        if self._ttl*2 + self._master_last_ts < time.time() and self._master_content:
             self._log.warning(f'[cache] Data in cache for master is too old (last ts: {self._master_last_ts}). Cleaning up cache ...')
             self._master_content = set()
             

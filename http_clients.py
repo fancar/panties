@@ -22,21 +22,23 @@ async def http_client(ctx,master,**kwargs):
     log = ctx['logger']
     while True:
         start = time.time()
-        log.debug('[http-client] open session GET:{}'.format(kwargs['url']))
+        log.debug('[http-client] opening session GET:{}'.format(kwargs['url']))
 
-        async with aiohttp.ClientSession() as session:
-            async with session.get(**kwargs) as resp:
-                if resp.status in range(200,300):
-                    d = await resp.json()
-                    # print(d)
-                    log.debug('[http-client] finished GET: {} (code:{})! took: {} seconds'.format(kwargs['url'],resp.status,time.time()-start))
-                    try:
-                        ctx["cache"].save_data(d,master)
-                    except Exception as e:
-                        log.error(e)
-                else:
-                    log.error('[http-client] error GET: {} (code:{})! took: {} seconds'.format(kwargs['url'],resp.status,time.time()-start))
-
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(**kwargs) as resp:
+                    if resp.status in range(200,300):
+                        d = await resp.json()
+                        # print(d)
+                        log.debug('[http-client] finished GET: {} (code:{})! took: {} seconds'.format(kwargs['url'],resp.status,time.time()-start))
+                        try:
+                            ctx["cache"].save_data(d,master)
+                        except Exception as e:
+                            log.error(e)
+                    else:
+                        log.error('[http-client] error GET: {} (code:{})! took: {} seconds'.format(kwargs['url'],resp.status,time.time()-start))
+        except Exception as e:
+            log.error('[http-client] unable to get url {} error: {} '.format(kwargs['url'],e))
         
         log.debug('-------------------------------------')
         # return res
