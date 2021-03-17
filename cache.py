@@ -22,6 +22,16 @@ class Cache:
         self._master_content = set()
         self._master_last_ts = time.time()
 
+
+    # @property
+    def item(self,item_id):
+        print("item_id ",item_id)
+        item = self._data.get(item_id.upper())
+        print("item ",item)
+        if item is None:
+            return
+        return item["data"]
+
     @property
     def data(self):
         self.check_ttl()
